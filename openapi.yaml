@@ -1,0 +1,164 @@
+openapi: 3.0.3
+# The info object
+info:
+  # The title of the API
+  title: Advent Message API
+  # A good description for the API
+  description: The festive advent API sample I wrote for [24 Days in Umbraco 2022](https://24days.in/umbraco-cms/2022/). This the 11th year of the advent calendar.
+  # Version of the OpenAPI document (different from the OpenAPI Spec Version or the API Implementation Version)
+  version: 1.0.0
+  # Contact information for the API (Contact Object Type)
+  contact:
+    name: Poornima Nayar # Name of the contact/organisation
+    email: hello@email.com # Email address of the contact
+    url: https://www.poornimanayar.co.uk # Url pointing to contact information
+  # License information for the API (License Object Type)
+  license:
+    # The license name for the API
+    name: Apache 2.0
+    # Url to the license
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+# Reference external documentation for API
+externalDocs:
+  # Url for the external documentation
+  url: https://archive.24days.in/umbraco-cms/about/
+  # Description of the external documentation
+  description: The external documentation of the api resides here...
+# Tags that can be applied to various operations, an array of tags expected
+tags:
+  # name of the tag
+  - name: Advent
+    # description of the tag
+    description: Advent Operations
+    # external documentation for this tag, same as the external documentation object
+    externalDocs:
+      url: https://archive.24days.in/umbraco-cms/about/
+      description: Learn more about the tag
+# The server object
+servers:
+  # A single server object specifying the dev url and description
+  - url: https://dev.url
+    description: Dev Server
+  # A single server object specifying the test url and description
+  - url: https://test.url
+    description: Test Server
+  # A single server object specifying the localhost url and description
+  - url: https://localhost:7112
+    description: Localhost
+# The Paths object to list endpoints and operations on the endpoints
+paths:
+  # The advent endpoint
+  /advent:
+    # The GET operation on the path /advent
+    get:
+      # Tag with Advent tag discussed above, putting it in the logical group Advent
+      tags:
+        - Advent
+      # Summary of the operation
+      summary: Get advent messages
+      # Description of the operation
+      description: Get a list of advent messages from the in-memory list
+      # An operation id for the operation, typically the method name, used to uniquely identify the operation
+      operationId: GetMessages
+      # The responses
+      responses:
+        # The 200OK response definition
+        "200":
+          # Description of the response
+          description: List of Advent Messages
+          # Potential response payloads, multiple media types can be specified
+          content:
+            # Details of the JSON response (Media Type Object)
+            application/json:
+              # Define the return type
+              schema:
+                # type of response
+                type: array
+                # type of items in the response
+                items:
+                  # reference a schema defined globally in the response section for the return type
+                  $ref: "#/components/schemas/AdventMessage"
+    # The POST operation
+    post:
+      # Tag with Advent tag discussed above, putting it in the logical group Advent
+      tags:
+        - Advent
+      # Summary of the operation
+      summary: Create advent message
+      # Description of the operation
+      description: Adds a new advent message to the in-memory list
+      # An operation id for the operation, typically the method name, used to uniquely identify the operation
+      operationId: AddMessage
+      # The request body
+      requestBody:
+        # Description for the request body
+        description: The request payload
+        # whether the field is required
+        required: true
+        content:
+          # Details of the JSON request payload (Media Type Object)
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdventMessage"
+      # The responses
+      responses:
+        # The 200OK response definition
+        "201":
+          # Description of the response
+          description: Added advent message successfully
+          content:
+            # Details of the JSON response (Media Type Object)
+            application/json:
+              # Define the return type
+              schema:
+                # reference a schema defined globally in the response section for the return type
+                $ref: "#/components/schemas/AdventMessage"
+  /advent/{id}:
+    get:
+      tags:
+        - Advent
+      summary: Get a single advent message
+      description: Get an advent messages from the in-memory list
+      operationId: GetMessage
+      # Parameters for the operation
+      parameters:
+        # name of the parameter
+        - name: id
+          # A description for the field
+          description: The id of the advent message to be retrieved
+          # required
+          required: true
+          # location of parameter. can be path, header, query or cookie
+          in: path
+          schema:
+            # type of parameter
+            type: integer
+      responses:
+        "200":
+          description: An Advent Message object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdventMessage"
+        "404":
+          description: Advent message not found
+
+# The components section
+components:
+  # reusable schemas
+  schemas:
+    # The reusable AdventMessage schema
+    AdventMessage:
+      # Type of schema
+      type: object
+      # Properties in the object
+      properties:
+        # The Id field
+        Id:
+          # Type of the Id field
+          type: integer
+          
+        # The Message field
+        Message:
+          # Type of the Message field
+          type: string
